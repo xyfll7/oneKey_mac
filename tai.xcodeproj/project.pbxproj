@@ -15,6 +15,7 @@
 		0001A0FF277223FF008A5AA5 /* taiUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0001A0FE277223FF008A5AA5 /* taiUITestsLaunchTests.swift */; };
 		0096FEE727722B74000441D5 /* HotKey in Frameworks */ = {isa = PBXBuildFile; productRef = 0096FEE627722B74000441D5 /* HotKey */; };
 		00AA8BA82D164B070085CCEA /* LaunchAtLogin in Frameworks */ = {isa = PBXBuildFile; productRef = 00AA8BA72D164B070085CCEA /* LaunchAtLogin */; };
+		00C556672DA676B400D15808 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 00C556662DA676B400D15808 /* Localizable.xcstrings */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,6 +48,7 @@
 		0001A0FE277223FF008A5AA5 /* taiUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = taiUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		007C9560277244EB00BFE913 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		0096FEE827722BC8000441D5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		00C556662DA676B400D15808 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -102,6 +104,7 @@
 			children = (
 				0096FEE827722BC8000441D5 /* Info.plist */,
 				0001A0E0277223FE008A5AA5 /* AppDelegate.swift */,
+				00C556662DA676B400D15808 /* Localizable.xcstrings */,
 				0001A0E4277223FF008A5AA5 /* Assets.xcassets */,
 				0001A0E6277223FF008A5AA5 /* Main.storyboard */,
 				0001A0E9277223FF008A5AA5 /* tai.entitlements */,
@@ -217,6 +220,7 @@
 			knownRegions = (
 				en,
 				Base,
+				"zh-Hans",
 			);
 			mainGroup = 0001A0D4277223FE008A5AA5;
 			packageReferences = (
@@ -240,6 +244,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0001A0E5277223FF008A5AA5 /* Assets.xcassets in Resources */,
+				00C556672DA676B400D15808 /* Localizable.xcstrings in Resources */,
 				0001A0E8277223FF008A5AA5 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -390,6 +395,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
@@ -444,6 +450,7 @@
 				MTL_FAST_MATH = YES;
 				SDKROOT = macosx;
 				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 			};
 			name = Release;

@@ -13,16 +13,24 @@ import CryptoKit
 @main
 class AppDelegate: NSObject, NSApplicationDelegate {
     
+    internal let configFileURL = FileManager.default.urls(
+        for: .documentDirectory,
+        in: .userDomainMask
+    )[0].appendingPathComponent("taiConfig.json")
+    
+    
     let statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
     
     internal var hotKeys: [String: HotKey] = [:]
     internal var configs: [Config] = []
+    
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         let itemImage = NSImage(named: "S")
         itemImage?.isTemplate = true
         statusItem.button?.image = itemImage
         statusItem.button?.action = #selector(abc(_:))
+        create_a_configuration_file(configFileURL:configFileURL)
         getConfigs()
     }
     
@@ -40,26 +48,33 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 }
 
 // 配置模型
-struct AppConfig: Codable {
-    var appName: String
-    var version: String
-    var settings: [String: Bool]
-    var preferences: Preferences
-    
-    struct Preferences: Codable {
-        var theme: String
-        var fontSize: Int
-        var autoSave: Bool
-    }
-    
-    // 默认配置
-    static let `default` = AppConfig(
-        appName: "MyApp。。。。",
-        version: "1.0",
-        settings: ["darkMode": false, "notifications": true],
-        preferences: Preferences(theme: "Light", fontSize: 14, autoSave: true)
-    )
+struct Config: Codable {
+    var title:String
+    var key:String
+    var command:String
+    var windows_title:String
+    var windows_key:String
+    // 多个默认配置
+    static let `defaults` = [
+        Config(
+            title: "⌘+O 一键欧陆",
+            key: "command+o",
+            command: "https://dict.eudic.net/dicts/en/",
+            windows_title: "ctrl+O 一键有道",
+            windows_key: "Control+O"
+        ),
+        Config(
+            title: "另一个配置",
+            key: "command+p",
+            command: "https://example.com",
+            windows_title: "Windows配置",
+            windows_key: "Control+P"
+        )
+    ]
+
 }
+
+
 
 
 extension AppDelegate {
@@ -69,10 +84,29 @@ extension AppDelegate {
             menu.addItem(NSMenuItem(title:item.title, action: nil ,  keyEquivalent: ""))
         }
         menu.addItem(NSMenuItem.separator())
-        menu.addItem(NSMenuItem(title:LaunchAtLogin.isEnabled ? "✔" : "✗" + "  开机启动" , action: #selector(AppDelegate.startLogin(_:)), keyEquivalent: "s"))
-        menu.addItem(NSMenuItem(title: "退出", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q"))
+        menu.addItem(
+            NSMenuItem(title:"\(LaunchAtLogin.isEnabled ? "✔" : "✗") \(NSLocalizedString("button.launch_at_login", comment: "Launch at Login menu item"))",
+                       action: #selector(AppDelegate.startLogin(_:)), keyEquivalent: "s"))
+        let button_config = NSMenuItem(title: NSLocalizedString("button.config",comment: "Button to adjust settings"), action: nil, keyEquivalent: "c")
+        menu.addItem(button_config)
         
-        menu.addItem(NSMenuItem(title: "测试", action: #selector(AppDelegate.test(_:)), keyEquivalent: "q"))
+        // 添加子菜单项
+        let submenu = NSMenu()
+        submenu.addItem(NSMenuItem(
+            title: NSLocalizedString("button.open_configfile", comment: "Open Configfile"),
+            action: #selector(AppDelegate.open_config_file(_:)),
+            keyEquivalent: "o"
+        ))
+        submenu.addItem( NSMenuItem(
+            title: NSLocalizedString("button.reload_configfile", comment: "Reload Configfile"),
+            action: #selector(AppDelegate.load_config_file(_:)),
+            keyEquivalent: "r"
+        ))
+        button_config.submenu = submenu
+        
+        menu.addItem(
+            NSMenuItem(title: NSLocalizedString("button.quit",comment: "Button to exit the application completely"), action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q"))
+        
         statusItem.menu = menu
     }
     func initHotKeys(configs:[Config]) {
@@ -104,14 +138,22 @@ extension AppDelegate {
         LaunchAtLogin.isEnabled = !LaunchAtLogin.isEnabled
         initMenus(configs: self.configs)
     }
-    @objc func test(_ sender: Any?) {
+    @objc func open_config_file(_ sender: Any?) {
+        self.openFileWithTextEdit(filePath: configFileURL)
+    }
+    @objc func load_config_file(_ sender: Any?){
+        
+    }
+    
+    func create_a_configuration_file(configFileURL:URL) {
         // 创建一个配置文件
-        let configFileName = "taiConfig.json"
         
         let configFileURL = FileManager.default.urls(
             for: .documentDirectory,
             in: .userDomainMask
-        )[0].appendingPathComponent(configFileName)
+        )[0].appendingPathComponent("taiConfig.json")
+        
+        print(":::",configFileURL.path)
         
         if FileManager.default.fileExists(atPath: configFileURL.path) {
             print("配置文件已存在")
@@ -119,15 +161,13 @@ extension AppDelegate {
             do {
                 let encoder = JSONEncoder()
                 encoder.outputFormatting = .prettyPrinted // 启用格式化
-                let data = try encoder.encode(AppConfig.default)
+                let data = try encoder.encode(Config.defaults)
                 try data.write(to: configFileURL)
             } catch {
                 print("Error saving config: \(error)")
             }
         }
-        self.openFileWithTextEdit(filePath: configFileURL)
     }
-    
     
     func openFileWithTextEdit(filePath: URL) {
         if let url = NSWorkspace.shared.urlForApplication(withBundleIdentifier: "com.apple.TextEdit") {
@@ -191,11 +231,6 @@ let commands:[String:NSEvent.ModifierFlags] = [
 ]
 
 
-struct Config:Codable {
-    var title:String
-    var key:String
-    var command:String
-}
 
 extension AppDelegate {
     func getConfigs() {
