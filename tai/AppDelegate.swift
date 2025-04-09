@@ -124,8 +124,8 @@ extension AppDelegate {
             } catch {
                 print("Error saving config: \(error)")
             }
-            self.openFileWithTextEdit(filePath: configFileURL)
         }
+        self.openFileWithTextEdit(filePath: configFileURL)
     }
     
     
