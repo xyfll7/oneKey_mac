@@ -1,0 +1,24 @@
+{
+  "originHash" : "38f3e8fc20d86222899de493ce41ac9cad4bf083b7c9be63dd49a23baad925e1",
+  "pins" : [
+    {
+      "identity" : "hotkey",
+      "kind" : "remoteSourceControl",
+      "location" : "https://gitee.com/xyfll7/HotKey.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "c13662730cb5bc28de4a799854bbb018a90649bf"
+      }
+    },
+    {
+      "identity" : "launchatlogin",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/asaxing/LaunchAtLogin.git",
+      "state" : {
+        "branch" : "main",
+        "revision" : "8e28b5e5a9561ace33a26c55d78f74963fbce6f9"
+      }
+    }
+  ],
+  "version" : 3
+}
